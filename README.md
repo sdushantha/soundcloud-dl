@@ -23,9 +23,6 @@ usage: soundcloud-dl.py [-h] url
 python3 soundcloud-dl.py https://soundcloud.com/marshmellomusic/friends
 ```
 
-## ⚠️ WARNING
-THIS WAS MADE FOR EDUCATIONAL PURPOSES ONLY
-
 ## :scroll: License
 MIT License
 
