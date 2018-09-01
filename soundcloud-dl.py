@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import re
 import requests
 import urllib.request
@@ -31,6 +33,7 @@ def get_id(html):
 	except IndexError:
 		print("\033[91m✘ Could not find song ID\033[0m")
 		sys.exit()
+
 
 def get_tags(html):
 
