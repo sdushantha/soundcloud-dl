@@ -1,6 +1,8 @@
 # soundcloud-dl
 > Download SoundCloud music at 128kbps with album art and tags
 
+[![asciicast](https://asciinema.org/a/199262.png)](https://asciinema.org/a/199262)
+
 *Tested on Linux (Manjaro)*
 
 ## :floppy_disk: Installation
