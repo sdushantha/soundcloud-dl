@@ -12,7 +12,7 @@ import argparse
 import eyed3
 import taglib
 
-# btw, this is not my id
+
 CLIENTID="Oa1hmXnTqqE7F2PKUpRdMZqWoguyDLV0"
 API = "https://api.soundcloud.com/i1/tracks/{0}/streams?client_id={1}"
 
