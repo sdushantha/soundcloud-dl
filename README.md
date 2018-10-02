@@ -11,6 +11,9 @@
 # clone the repo
 $ git clone https://github.com/sdushantha/soundcloud-dl.git
 
+# change directory to soundcloud-dl
+$ cd soundcloud-dl
+
 # install the requirements
 $ pip3 install -r requirements.txt
 ```
