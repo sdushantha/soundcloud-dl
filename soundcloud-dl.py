@@ -10,7 +10,8 @@ import sys
 import argparse
 
 import eyed3
-import taglib
+import mutagen
+from mutagen.easyid3 import EasyID3
 
 
 CLIENTID="Oa1hmXnTqqE7F2PKUpRdMZqWoguyDLV0"
@@ -67,22 +68,27 @@ def tag(fname, title, artist, genre, arturl):
 	But I dont know how to. So I would not mind some
 	help :)
 	"""
-	
-	song = taglib.File(fname)
 
-	song.tags["ARTIST"] = [artist]
-	song.tags["TITLE"] = [title]
+	try:
+		tag = EasyID3(fname)
+
+	except mutagen.id3.ID3NoHeaderError:
+		tag = mutagen.File(fname, easy=True)
+		tag.add_tags()
+
+	tag['artist'] = artist
+	tag['title'] = title
 
 	# Giving the album the same name as
 	# the title beacause 
 	# I cant find the album name
-	song.tags["ALBUM"] = [title]
-	song.tags["GENRE"] = [genre]
-	song.save()
+	tag['album'] = title
+	tag['genre'] = genre
+	tag.save()
 
 	song = eyed3.load(fname)
 
-	imagename = str(title+"500x500.jpg")
+	imagename = str(title.replace("/", "\\")+"500x500.jpg")
 
 	image = urllib.request.urlretrieve(arturl, imagename)
 	print("\033[92m✔ Album art downloaded\033[0m")
@@ -126,7 +132,7 @@ def main():
 	file_url = data["http_mp3_128_url"]
 
 	# Example file name --> Adele - Hello.mp3
-	fname = str(artist+" - "+title+".mp3")
+	fname = str(artist+" - "+title.replace("/", "")+".mp3")
  
 	urllib.request.urlretrieve(file_url, fname)
 	print("\033[92m✔ Downloaded:\033[0m {0} by {1}".format(title, artist))
