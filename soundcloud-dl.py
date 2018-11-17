@@ -9,10 +9,9 @@ import os
 import sys
 import argparse
 
-import eyed3
 import mutagen
 from mutagen.easyid3 import EasyID3
-
+from mutagen.id3 import ID3, APIC
 
 CLIENTID="Oa1hmXnTqqE7F2PKUpRdMZqWoguyDLV0"
 API = "https://api.soundcloud.com/i1/tracks/{0}/streams?client_id={1}"
@@ -63,44 +62,38 @@ def get_album_art_url(html):
 
 
 def tag(fname, title, artist, genre, arturl):
-	"""
-	Yes, I know I can do the tagging in a better way.
-	But I dont know how to. So I would not mind some
-	help :)
-	"""
 
-	try:
-		tag = EasyID3(fname)
+    try:
+        tag = EasyID3(fname)
 
-	except mutagen.id3.ID3NoHeaderError:
-		tag = mutagen.File(fname, easy=True)
-		tag.add_tags()
+    except mutagen.id3.ID3NoHeaderError:
+        tag = mutagen.File(fname, easy=True)
+        tag.add_tags()
 
-	tag['artist'] = artist
-	tag['title'] = title
+    tag['artist'] = artist
+    tag['title'] = title
 
-	# Giving the album the same name as
-	# the title beacause 
-	# I cant find the album name
-	tag['album'] = title
-	tag['genre'] = genre
-	tag.save()
+    # Giving the album the same name as
+    # the title beacause 
+    # I cant find the album name
+    tag['album'] = title
+    tag['genre'] = genre
+    tag.save()
 
-	song = eyed3.load(fname)
+    id3 = ID3(fname)
 
-	imagename = str(title.replace("/", "\\")+"500x500.jpg")
+    imagename = str(title.replace("/", "\\")+"500x500.jpg")
 
-	image = urllib.request.urlretrieve(arturl, imagename)
-	print("\033[92m✔ Album art downloaded\033[0m")
+    image = urllib.request.urlretrieve(arturl, imagename)
+    print("\033[92m✔ Album art downloaded\033[0m")
 
-	imagedata = open(imagename, "rb").read()
+    imagedata = open(imagename, "rb").read()
 
-	song.tag.images.set(3, imagedata, "image/jpeg")
+    id3.add(APIC(3, 'image/jpeg', 3, 'Front cover', imagedata))
+    id3.save(v2_version=3)
 
-	song.tag.save()
-
-	# Always leave the place better than you found it ;)
-	os.remove(imagename)
+    # Always leave the place better than you found it ;)
+    os.remove(imagename)
 
 
 def main():
@@ -141,7 +134,6 @@ def main():
 	tag(fname, title, artist, genre, arturl)
 
 	print("\033[92m✔ Saved:\033[0m {}".format(fname))
-
 
 
 if __name__=="__main__":
