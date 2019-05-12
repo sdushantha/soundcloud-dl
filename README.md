@@ -1,3 +1,5 @@
+<h1 align="center">soundcloud-dl has stopped working. I am trying to fix it as fast as possible</h1>
+
 # soundcloud-dl
 > Download SoundCloud music at 128kbps with album art and tags
 
